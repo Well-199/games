@@ -6,10 +6,7 @@ import axios from 'axios'
 
 @Injectable()
 export class GamesService {
-  constructor(
-    @Inject(CACHE_MANAGER) private cacheManager: Cache,
-    private prisma: PrismaService
-  ) {}
+  constructor(@Inject(CACHE_MANAGER) private cacheManager: Cache, private prisma: PrismaService) {}
 
   async searchGame(title: string) {
     const cached = await this.cacheManager.get(title.toLowerCase())
@@ -31,9 +28,9 @@ export class GamesService {
             title: gameData.name,
             description: gameData.slug,
             platforms: gameData.platforms.map((p) => p.platform.name).join(', '),
-            releaseDate: new Date(gameData.released),
+            releasedate: new Date(gameData.released),
             rating: gameData.rating,
-            coverImage: gameData.background_image,
+            coverimage: gameData.background_image,
         },
     })
 
