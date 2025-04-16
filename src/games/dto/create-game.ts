@@ -19,4 +19,3 @@ export class Game {
     @ApiProperty({ example: 'https://image.url' })
     coverImage: string
 }
-

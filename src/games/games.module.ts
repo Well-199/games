@@ -5,7 +5,7 @@ import { PrismaService } from '../prisma.service'
 import { CacheModule } from '@nestjs/cache-manager'
 
 @Module({
-  imports: [CacheModule.register()],
+  imports: [CacheModule.register()], // necessario para ter acesso global a CACHE_MANAGER
   controllers: [GamesController],
   providers: [GamesService, PrismaService],
 })

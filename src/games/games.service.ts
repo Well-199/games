@@ -40,7 +40,11 @@ export class GamesService {
   }
 
   async listGames(name?: string, platform?: string, page = 1, limit = 10) {
-    const skip = (page - 1) * limit;
+    
+    // Com SQL puro usamos o offset e não realizamos esse calculo
+    // Calcula quantos registros devem ser "pulados" com base na página e no limite
+    // Exemplo: página 2 com limite 10 → pula os 10 primeiros registros ((2-1)*10 = 10)
+    const skip = (page - 1) * limit
   
     // Definindo os filtros corretamente para o Prisma
     const where = {
@@ -51,7 +55,7 @@ export class GamesService {
     // Consultando os jogos e a contagem total com Promise.all
     const [games, total] = await Promise.all([
       this.prisma.game.findMany({ where, skip, take: limit }),
-      this.prisma.game.count({ where })
+      this.prisma.game.count({ where })// ja retorna a quantidade de itens
     ])
   
     return { total, page, limit, games }
