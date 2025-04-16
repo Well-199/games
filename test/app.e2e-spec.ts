@@ -1,25 +1,31 @@
-import { Test, TestingModule } from '@nestjs/testing';
-import { INestApplication } from '@nestjs/common';
-import * as request from 'supertest';
-import { App } from 'supertest/types';
-import { AppModule } from './../src/app.module';
+import { Test, TestingModule } from '@nestjs/testing'
+import { GamesService } from '../src/games/games.service'
+import { PrismaService } from '../src/prisma.service'
+import { CACHE_MANAGER } from '@nestjs/cache-manager'
+import { Cache } from 'cache-manager'
 
-describe('AppController (e2e)', () => {
-  let app: INestApplication<App>;
+describe('GamesService', () => {
+    let service: GamesService
+    let prisma: PrismaService
 
-  beforeEach(async () => {
-    const moduleFixture: TestingModule = await Test.createTestingModule({
-      imports: [AppModule],
-    }).compile();
+    beforeEach(async () => {
+        const module: TestingModule = await Test.createTestingModule({
+        providers: [GamesService, PrismaService,
+            {
+                provide: CACHE_MANAGER,
+                    useValue: {
+                        get: jest.fn(),
+                        set: jest.fn(),
+                } as unknown as Cache,
+            },
+        ],
+        }).compile()
 
-    app = moduleFixture.createNestApplication();
-    await app.init();
-  });
+        service = module.get<GamesService>(GamesService)
+        prisma = module.get<PrismaService>(PrismaService)
+    })
 
-  it('/ (GET)', () => {
-    return request(app.getHttpServer())
-      .get('/')
-      .expect(200)
-      .expect('Hello World!');
-  });
-});
+    it('should be defined', () => {
+        expect(service).toBeDefined()
+    })
+})

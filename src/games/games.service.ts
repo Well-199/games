@@ -1,6 +1,7 @@
 import { Injectable, Inject, NotFoundException } from '@nestjs/common'
 import { CACHE_MANAGER } from '@nestjs/cache-manager'
 import { PrismaService } from '../prisma.service'
+import { Prisma } from '@prisma/client'
 import { Cache } from 'cache-manager'
 import axios from 'axios'
 
@@ -14,14 +15,14 @@ export class GamesService {
 
     const existing = await this.prisma.game.findFirst({ where: { title: { equals: title, mode: 'insensitive' } } })
     if (existing) {
-        await this.cacheManager.set(title.toLowerCase(), existing);
-        return existing;
+        await this.cacheManager.set(title.toLowerCase(), existing)
+        return existing
     }
 
     const { data } = await axios.get(`https://api.rawg.io/api/games?search=${title}&key=YOUR_RAWG_API_KEY`)
-    const gameData = data.results?.[0];
+    const gameData = data.results?.[0]
 
-    if (!gameData) throw new NotFoundException('Game not found');
+    if (!gameData) throw new NotFoundException('Game not found')
 
     const game = await this.prisma.game.create({
         data: {
@@ -38,12 +39,21 @@ export class GamesService {
     return game
   }
 
-  async listGames(name?: string, platform?: string) {
-    return this.prisma.game.findMany({
-        where: {
-            title: name ? { contains: name, mode: 'insensitive' } : undefined,
-            platforms: platform ? { contains: platform, mode: 'insensitive' } : undefined,
-        },
-    })
+  async listGames(name?: string, platform?: string, page = 1, limit = 10) {
+    const skip = (page - 1) * limit;
+  
+    // Definindo os filtros corretamente para o Prisma
+    const where = {
+      title: name ? { contains: name, mode: Prisma.QueryMode.insensitive } : undefined,
+      platforms: platform ? { contains: platform, mode: Prisma.QueryMode.insensitive } : undefined,
+    }
+  
+    // Consultando os jogos e a contagem total com Promise.all
+    const [games, total] = await Promise.all([
+      this.prisma.game.findMany({ where, skip, take: limit }),
+      this.prisma.game.count({ where })
+    ])
+  
+    return { total, page, limit, games }
   }
 }

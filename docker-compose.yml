@@ -1,15 +1,13 @@
-version: '3.8'
-
 services:
-  api:
+  games:
+    container_name: games_api
     build: .
     ports:
-      - '3000:3000'
+      - "3000:3000"
     env_file:
       - .env
-    networks:
-      - appnet
-
-networks:
-  appnet:
+    volumes:
+      - .:/app
+      - /app/node_modules  # Evita conflitos com o node_modules do host
+    command: npm run start:dev  # Hot reload
 
