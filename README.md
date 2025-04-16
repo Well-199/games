@@ -26,7 +26,7 @@ e dados da conexão com o banco postgresql
 DATABASE_URL="postgresql://user:password@localhost:5432/database_name?schema=public"
 ```
 
-#### criando as tabelas no banco usando prisma
+#### criando a tabela no banco usando prisma
 ```bash
 npx prisma migrate dev --create-game init
 ```
@@ -35,7 +35,7 @@ e após
 npx prisma generate
 ```
 
-Ou caso queria cria as tabela diréto no banco execute o comando diréto no banco de dados
+Ou caso queria cria a tabela diréto no banco execute o comando diréto no banco de dados
 ```bash
 CREATE TABLE public.game (
     id serial4 NOT NULL,
@@ -49,7 +49,7 @@ CREATE TABLE public.game (
 );
 ```
 
-após criar as tabela direto no banco atualize o arquivo schema.prisma com o comando abaixo
+após criar a tabela direto no banco atualize o arquivo schema.prisma com o comando abaixo
 ```bash
 npx prisma db pull
 ```
