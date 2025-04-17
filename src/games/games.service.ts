@@ -18,8 +18,8 @@ export class GamesService {
         await this.cacheManager.set(title.toLowerCase(), existing)
         return existing
     }
-
-    const { data } = await axios.get(`https://api.rawg.io/api/games?search=${title}&key=YOUR_RAWG_API_KEY`)
+    
+    const { data } = await axios.get(`https://api.rawg.io/api/games?search=${title}&key=${process.env.RAWG_API_KEY}`)
     const gameData = data.results?.[0]
 
     if (!gameData) throw new NotFoundException('Game not found')
