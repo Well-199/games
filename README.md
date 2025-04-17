@@ -65,18 +65,32 @@ npm run start:dev
 docker-compose up --build
 ```
 
-## Rodar testes
-
+### Testar api e visualizar documentação no Swagger
 ```bash
-# unit tests
-npm run test
-
-# e2e tests
-npm run test:e2e
-
-# test coverage
-npm run test:cov
+http://localhost:3000/api
 ```
 
-## Deployment
+## Rodar teste
 
+```bash
+npm run test:e2e
+```
+
+## Deploy em produção
+```bash
+npm run start:prod
+```
+ou mais recomendado
+Instale o PM2 no servidor em produção
+```bash
+npm install -g pm2
+```
+Inicie a aplicação com name 'games'
+```bash
+pm2 start dist/main.js --name games --env production
+```
+Configure a reinicialização da aplicação
+```bash
+pm2 save
+pm2 startup
+```
