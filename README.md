@@ -1,6 +1,6 @@
 ### api para listar games e filtrar por titulo, nome e plataforma
 
-## Para instalas as dependencias
+## Para instalar as dependencias
 
 ```bash
 npm install
